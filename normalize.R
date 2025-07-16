@@ -12,7 +12,8 @@ tcga.eset  <- readRDS("./data/TCGA/tcga_data_matched_tumor_type_and_genes.Rds")
 
 tcga.exp <- exprs(tcga.eset)
 tismo.exp <- exprs(tismo.eset)
-
+tcga.anns <- pData(tcga.eset)
+tismo.anns <- pData(tismo.eset)
 
 
 tcga.exp.nor <- tcga.exp
@@ -28,8 +29,11 @@ for(i in 1: ncol(tismo.exp))
   tismo.exp.nor[,i] <- RankNorm(tismo.exp[,i])
 }
 
+tcga.exp.t <- data.frame(t(tcga.exp.nor),CANCER_TYPE = tcga.anns$type)
+tismo.exp.t <- data.frame(t(tismo.exp.nor),CANCER_TYPE = tismo.anns$Cancer_type_TCGA)
 
-write.csv(tismo.exp.nor,"tismo_data_normalized.csv")
-write.csv(tcga.exp.nor,"tcga_data_normalized.csv")
+
+write.csv(tismo.exp.t,"tismo_data_normalized.csv")
+write.csv(tcga.exp.t,"tcga_data_normalized.csv")
 
 
